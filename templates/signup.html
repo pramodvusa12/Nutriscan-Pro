@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up – NutriScan Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0f0d;
+      --surface: #111a14;
+      --card: #16231a;
+      --border: #1f3328;
+      --accent: #3dffa0;
+      --accent2: #7fffcb;
+      --warn: #ff6b4a;
+      --text: #e8f5ee;
+      --text-dim: #7a9e8a;
+      --font-head: 'Clash Display', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text); font-family: var(--font-body);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 2rem; position: relative; overflow: hidden;
+    }
+
+    /* Background mesh + grid */
+    body::before {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(61,255,160,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(127,255,203,0.06) 0%, transparent 60%);
+      animation: meshPulse 8s ease-in-out infinite alternate;
+    }
+    body::after {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px; opacity: 0.2;
+    }
+    @keyframes meshPulse { from{opacity:0.7;transform:scale(1)} to{opacity:1;transform:scale(1.05)} }
+
+    /* Card */
+    .auth-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 420px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2.5rem 2.2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      animation: fadeUp 0.6s ease both;
+    }
+    .auth-wrap::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 16px 16px 0 0;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Logo */
+    .logo {
+      font-family: var(--font-head); font-size: 1.3rem; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 0.4rem;
+    }
+    .logo span { color: var(--accent); }
+
+    h1 {
+      font-family: var(--font-head); font-size: 1.9rem; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 0.92rem; color: var(--text-dim); margin-bottom: 2rem; font-weight: 300;
+    }
+
+    /* Inputs */
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block; font-size: 0.75rem; font-weight: 500; color: var(--text-dim);
+      margin-bottom: 0.45rem; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .form-group input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.85rem 1rem; color: var(--text);
+      font-family: var(--font-body); font-size: 0.95rem; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(61,255,160,0.12);
+    }
+    .form-group input::placeholder { color: var(--text-dim); opacity: 0.6; }
+    .hint {
+      font-size: 0.75rem; color: var(--text-dim); margin-top: 0.4rem;
+    }
+
+    /* Password strength meter */
+    .strength {
+      display: none; margin-top: 0.5rem;
+    }
+    .strength.visible { display: block; }
+    .strength-track {
+      height: 4px; background: var(--border); border-radius: 999px; overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%; width: 0%; border-radius: 999px;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+    .strength-label {
+      font-size: 0.7rem; margin-top: 0.3rem; font-weight: 500; letter-spacing: 0.03em;
+    }
+    .s-weak   { background: var(--warn); }
+    .s-mid    { background: #ffb84a; }
+    .s-strong { background: var(--accent); }
+
+    /* Submit button */
+    .btn-primary {
+      width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--accent); color: #06100a;
+      font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
+      padding: 0.9rem 2rem; border-radius: 8px; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s; margin-top: 0.8rem;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(61,255,160,0.3);
+    }
+
+    /* Bottom link */
+    .alt-link {
+      text-align: center; margin-top: 1.5rem;
+      font-size: 0.88rem; color: var(--text-dim);
+    }
+    .alt-link a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .alt-link a:hover { text-decoration: underline; }
+
+    /* Flash messages */
+    .flash {
+      padding: 0.7rem 1rem; border-radius: 8px; margin-bottom: 1rem;
+      font-size: 0.85rem; border: 1px solid var(--border);
+    }
+    .flash.error   { background: rgba(255,107,74,0.1); border-color: rgba(255,107,74,0.3); color: var(--warn); }
+    .flash.success { background: rgba(61,255,160,0.1); border-color: rgba(61,255,160,0.3); color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrap">
+    <div class="logo">Nutri<span>Scan</span> Pro</div>
+    <h1>Create your account</h1>
+    <p class="subtitle">Start scanning food for freshness in seconds.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash {{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="e.g. dharshini" required autofocus minlength="3"/>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="At least 6 characters" required minlength="6"/>
+
+        <div class="strength" id="strength">
+          <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
+          <div class="strength-label" id="strength-label"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">Sign Up</button>
+    </form>
+
+    <p class="alt-link">
+      Already have an account? <a href="/login">Log in</a>
+    </p>
+    <p class="alt-link" style="margin-top:0.5rem;">
+      <a href="/">← Back to home</a>
+    </p>
+  </div>
+
+  <script>
+    // Password strength meter (purely visual — backend still does its own checks)
+    const pwd = document.getElementById('password');
+    const strength = document.getElementById('strength');
+    const fill = document.getElementById('strength-fill');
+    const label = document.getElementById('strength-label');
+
+    pwd.addEventListener('input', () => {
+      const v = pwd.value;
+      if (!v) { strength.classList.remove('visible'); return; }
+      strength.classList.add('visible');
+
+      let score = 0;
+      if (v.length >= 6) score++;
+      if (v.length >= 10) score++;
+      if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+      if (/\d/.test(v)) score++;
+      if (/[^A-Za-z0-9]/.test(v)) score++;
+
+      const map = [
+        { w:'20%', cls:'s-weak',   text:'Weak'        },
+        { w:'40%', cls:'s-weak',   text:'Weak'        },
+        { w:'60%', cls:'s-mid',    text:'Okay'        },
+        { w:'80%', cls:'s-mid',    text:'Good'        },
+        { w:'100%',cls:'s-strong', text:'Strong'      },
+      ];
+      const s = map[Math.min(score, map.length) - 1] || map[0];
+      fill.style.width = s.w;
+      fill.className = 'strength-fill ' + s.cls;
+      label.textContent = s.text;
+      label.style.color = s.cls === 's-weak' ? 'var(--warn)'
+                        : s.cls === 's-mid'  ? '#ffb84a'
+                        :                       'var(--accent)';
+    });
+  </script>
+</body>
+</html>

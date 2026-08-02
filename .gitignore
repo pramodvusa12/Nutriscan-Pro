@@ -1,0 +1,7 @@
+clean_dataset/
+archive/
+*.pt
+*.zip
+__pycache__/
+instance/
+static/uploads/
