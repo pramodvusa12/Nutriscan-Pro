@@ -192,23 +192,20 @@ def pretty_label(label: str) -> str:
 
 
 def ensure_schema():
+    print("Creating database tables...")
+
     db.create_all()
+
+    print("Database tables created.")
+
     try:
         with db.engine.connect() as conn:
-            conn.execute(db.text('ALTER TABLE scan ADD COLUMN confidence FLOAT DEFAULT 0.0'))
+            conn.execute(db.text(
+                'ALTER TABLE scan ADD COLUMN confidence FLOAT DEFAULT 0.0'
+            ))
             conn.commit()
-    except Exception:
-        pass  # column already exists
-
-# ADD THESE 3 LINES
-with app.app_context():
-    ensure_schema()
-    load_model()
-
-otp_storage = {}
-   
-# Temporary OTP storage
-otp_storage = {}
+    except Exception as e:
+        print("ALTER TABLE skipped:", e)
 # =============================================================================
 # Routes — pages
 # =============================================================================
