@@ -199,6 +199,14 @@ def ensure_schema():
             conn.commit()
     except Exception:
         pass  # column already exists
+
+# ADD THESE 3 LINES
+with app.app_context():
+    ensure_schema()
+    load_model()
+
+otp_storage = {}
+   
 # Temporary OTP storage
 otp_storage = {}
 # =============================================================================
@@ -466,7 +474,4 @@ def upload():
 
 # =============================================================================
 if __name__ == '__main__':
-    with app.app_context():
-        ensure_schema()
-        load_model()
     app.run(debug=True)
